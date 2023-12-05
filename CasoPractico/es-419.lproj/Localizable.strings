@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  CasoPractico
+
+  Created by Joseph Antonio Garcia Hernandez on 04/12/23.
+  
+*/
+
+"alertButton" = "Aceptar";
+"textLogin" = "Entrar";
+"passwordText" = "Contraseña";
+"userText" = "Usuario";
+"emptyText" = "Campos vacios";
+"failLogin" = "Login Incorrecto";
+"languageText" = "Lenguaje(EN, ES)";
+"usersNumberText" = "Número Usuarios";
