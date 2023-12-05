@@ -40,11 +40,10 @@ final class LoginViewController: UIViewController {
     
     var buttonLogin : UIButton = {
         let btn = UIButton(frame: .zero)
-        let color = UIColor.green
-        btn.layer.borderColor = color.cgColor
+        btn.layer.borderColor = UIColor(hex: "7BE0AD").cgColor
         btn.layer.borderWidth = 2
         btn.layer.cornerRadius = 20
-        btn.backgroundColor = color
+        btn.backgroundColor = UIColor(hex: "7BE0AD")
         btn.setTitle(NSLocalizedString("textLogin", comment: ""), for: .normal)
         btn.titleLabel?.font =  .boldSystemFont(ofSize: 16)
         btn.setTitleColor(.black, for: .normal)
@@ -53,6 +52,17 @@ final class LoginViewController: UIViewController {
         btn.addTarget(self, action: #selector(didTapLogin), for: .touchUpInside)
         return btn
     }()
+    
+    var labelTitleLogin : UILabel = {
+        let label = UILabel(frame: .zero)
+        label.textAlignment = .center
+        label.textColor = UIColor(hex: "E0B0D5")
+        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.text = "LOGIN"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     
     var languageTextField : UITextField = {
         let textField = UITextField()
@@ -82,7 +92,7 @@ final class LoginViewController: UIViewController {
     // MARK: - Lifecycle -
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(hex: "E7E5E5")
         textFieldsLogin()
         btnLogin()
         textFieldService()
@@ -106,8 +116,15 @@ final class LoginViewController: UIViewController {
 extension LoginViewController: LoginView {
     
     func textFieldsLogin(){
+        
+        view.addSubview(labelTitleLogin)
+        labelTitleLogin.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        labelTitleLogin.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        labelTitleLogin.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        labelTitleLogin.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        
         view.addSubview(userTextField)
-        userTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        userTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
         userTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         userTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
         userTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
@@ -173,5 +190,41 @@ extension LoginViewController: LoginView {
                 self.badLoginAlert()
             }
         }
+    }
+}
+
+extension UIColor {
+    public convenience init(hex: String) {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 1
+        
+        let hexColor = hex.replacingOccurrences(of: "#", with: "")
+        let scanner = Scanner(string: hexColor)
+        var hexNumber: UInt64 = 0
+        var valid = false
+        
+        if scanner.scanHexInt64(&hexNumber) {
+            if hexColor.count == 8 {
+                r = CGFloat((hexNumber & 0xff000000) >> 24) / 255
+                g = CGFloat((hexNumber & 0x00ff0000) >> 16) / 255
+                b = CGFloat((hexNumber & 0x0000ff00) >> 8) / 255
+                a = CGFloat(hexNumber & 0x000000ff) / 255
+                valid = true
+            }
+            else if hexColor.count == 6 {
+                r = CGFloat((hexNumber & 0xff0000) >> 16) / 255
+                g = CGFloat((hexNumber & 0x00ff00) >> 8) / 255
+                b = CGFloat(hexNumber & 0x0000ff) / 255
+                valid = true
+            }
+        }
+        
+#if DEBUG
+        assert(valid, "UIColor initialized with invalid hex string")
+#endif
+        
+        self.init(red: r, green: g, blue: b, alpha: a)
     }
 }
